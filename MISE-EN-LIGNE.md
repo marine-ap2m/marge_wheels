@@ -8,29 +8,18 @@ publiera toute seule. Netlify Drop est en bas, comme dépannage.
 
 ## GitHub Pages — 5 minutes, une seule fois
 
-### 1. Publier la branche
+### 1. Activer Pages
 
-L'appli est sur la branche `claude/ma-marge-pwa-review-deploy-9g3gc3`.
-GitHub Pages publie plus simplement depuis `main`. Sur
-<https://github.com/marine-ap2m/marge_wheels> :
+Le code est déjà fusionné dans la branche `main` — il n'y a rien à publier.
 
-- onglet **Pull requests** → **New pull request** ;
-- base `main`, compare `claude/ma-marge-pwa-review-deploy-9g3gc3` ;
-- **Create pull request**, puis **Merge pull request**.
-
-(Si le dépôt n'a pas encore de branche `main`, GitHub te propose directement de
-faire de cette branche la branche par défaut : accepte, c'est équivalent.)
-
-### 2. Activer Pages
-
-Toujours sur le dépôt : **Settings** (roue dentée, en haut) → **Pages** (menu de
+Sur <https://github.com/marine-ap2m/marge_wheels> : **Settings** (roue dentée, en haut) → **Pages** (menu de
 gauche) → sous *Build and deployment* :
 
 - **Source** : `Deploy from a branch`
 - **Branch** : `main`, dossier `/ (root)`
 - **Save**
 
-### 3. Attendre 1 à 2 minutes
+### 2. Attendre 1 à 2 minutes
 
 Recharge la page Settings → Pages. GitHub affiche en haut :
 
@@ -44,7 +33,7 @@ C'est ton adresse. Elle ne changera plus.
 > données de tes plats, elles, restent dans ton téléphone et ne sont jamais
 > publiées.
 
-### 4. Installer sur le téléphone
+### 3. Installer sur le téléphone
 
 Ouvre cette adresse **sur le téléphone**, puis :
 
@@ -59,6 +48,36 @@ navigateur, et **ça marche sans réseau** — utile en cuisine ou en cave.
 
 ---
 
+---
+
+## Ce qu'il faut lui dire, en deux minutes
+
+Une fois le lien envoyé et l'icône installée, il n'y a plus rien à expliquer de
+technique. Le tour du propriétaire tient en cinq phrases :
+
+1. **L'appli s'ouvre toujours sur le calcul.** Nom du plat, puis chaque
+   ingrédient : son prix au kilo et le poids utilisé. Le coût se calcule tout
+   seul. La virgule fonctionne (`12,50`).
+2. **En bas, tu entres ton prix de carte, TTC.** L'appli répond tout de suite :
+   🔴 tu perds · 🟠 limite · ✅ tu gagnes. Objectif : au moins ×3.
+3. **« Enregistrer ce plat »** l'ajoute à ta carte. Un bouton *Mes plats*
+   apparaît alors en haut — c'est là que tu vois d'un coup d'œil combien sont en
+   rouge.
+4. **Dans Mes plats**, les rouges sont en premier. Touche un plat pour le
+   rouvrir, changer un prix, ré-enregistrer.
+5. **« Exporter toute la carte (PDF) »** sort la synthèse complète, à imprimer ou
+   à envoyer.
+
+Deux choses à lui dire une fois, parce qu'elles ne se devinent pas :
+
+- **Ses plats sont dans son téléphone, pas sur internet.** Personne d'autre ne
+  les voit ; c'est aussi pour ça qu'il faut utiliser *Sauvegarder mes plats*
+  avant de changer d'appareil.
+- **Si un bandeau noir « Nouvelle version disponible » apparaît**, il suffit
+  d'appuyer. Rien à réinstaller.
+
+---
+
 ## Ensuite : modifier l'appli
 
 Chaque fois qu'une modification est poussée sur `main`, GitHub Pages republie
@@ -68,7 +87,7 @@ fait. Rien à réinstaller, et la saisie en cours n'est jamais interrompue par u
 rechargement surprise.
 
 ⚠️ Une seule règle pour que ça marche : à chaque mise en ligne, **changer le
-numéro de version en haut de `sw.js`** (`mamarge-v2` → `mamarge-v3`, etc.).
+numéro de version en haut de `sw.js`** (`mamarge-v3` → `mamarge-v4`, etc.).
 Sans ça, les téléphones qui ont déjà l'appli gardent l'ancienne version en
 mémoire.
 

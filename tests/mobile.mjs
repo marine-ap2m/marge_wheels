@@ -22,6 +22,7 @@ for (const name of ['iPhone SE','iPhone 14 Pro','Pixel 7']) {
   ok(cout==='1,88 €', `virgule décimale : 12,50 €/kg × 150 g = ${cout} (attendu 1,88 €)`);
 
   await page.click('#add');
+  await page.waitForTimeout(80);   // l'appli place le curseur sur la nouvelle ligne (30 ms)
   await page.fill('.ing:last-child .nom','Pain "brioché"');   // guillemets = piege d echappement
   await page.fill('.ing:last-child [data-k=pk]','6.20');       // point decimal aussi
   await page.fill('.ing:last-child [data-k=g]','80');
@@ -29,6 +30,7 @@ for (const name of ['iPhone SE','iPhone 14 Pro','Pixel 7']) {
   ok(cout2==='2,37 €', `total 2 ingrédients = ${cout2} (attendu 2,37 €)`);
 
   await page.click('#add');
+  await page.waitForTimeout(80);
   const nom1 = await page.inputValue('.ing:nth-child(2) .nom');
   ok(nom1==='Pain "brioché"', `guillemets conservés après re-render : ${JSON.stringify(nom1)}`);
 
@@ -94,6 +96,7 @@ for (const name of ['iPhone SE','iPhone 14 Pro','Pixel 7']) {
 
   // taille de police des champs >= 16px (sinon iOS zoome tout seul)
   const zoom = await page.evaluate(()=>[...document.querySelectorAll('input')]
+    .filter(e=>e.getBoundingClientRect().height>0)
     .map(e=>parseFloat(getComputedStyle(e).fontSize)).filter(s=>s<16));
   ok(zoom.length===0, `champs ≥ 16px, pas de zoom auto iOS ${zoom.length?JSON.stringify(zoom):''}`);
 

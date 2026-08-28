@@ -1,7 +1,7 @@
 /* Ma Marge — service worker.
    Le HTML passe par le réseau d'abord (une nouvelle mise en ligne arrive tout de
    suite), le reste par le cache d'abord (démarrage instantané, marche hors-ligne). */
-const CACHE = 'mamarge-v2';
+const CACHE = 'mamarge-v3';
 const ASSETS = ['./','./index.html','./manifest.webmanifest',
   './icon-192.png','./icon-512.png','./icon-maskable-192.png','./icon-maskable-512.png','./favicon.png'];
 
