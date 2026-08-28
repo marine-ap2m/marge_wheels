@@ -8,6 +8,23 @@
 <meta name="apple-mobile-web-app-title" content="Ma Marge">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Ma Marge</title>
+<!-- Aperçu affiché quand on envoie le lien (WhatsApp, SMS, Messenger, Facebook…).
+     og:image DOIT être une adresse absolue : ces applications ne résolvent pas
+     les chemins relatifs. À changer si le site déménage. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ma Marge">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="https://marine-ap2m.github.io/marge_wheels/">
+<meta property="og:title" content="Ma Marge">
+<meta property="og:description" content="Ton plat te rapporte, ou te coûte ? Le calcul en 10 secondes.">
+<meta property="og:image" content="https://marine-ap2m.github.io/marge_wheels/apercu-partage.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ma Marge — Ton plat te rapporte, ou te coûte ?">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ma Marge">
+<meta name="twitter:description" content="Ton plat te rapporte, ou te coûte ? Le calcul en 10 secondes.">
+<meta name="twitter:image" content="https://marine-ap2m.github.io/marge_wheels/apercu-partage.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="favicon.png">
@@ -24,71 +41,71 @@
     color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2));
     background-attachment:fixed;
     min-height:100vh;min-height:100dvh;
-    padding:env(safe-area-inset-top) 0 calc(40px + env(safe-area-inset-bottom));}
+    padding:env(safe-area-inset-top) 0 calc(24px + env(safe-area-inset-bottom));}
   .wrap{max-width:520px;margin:0 auto;padding:0 16px}
-  header{padding:22px 4px 6px;text-align:center}
-  header h1{margin:0;font-size:26px;letter-spacing:-.5px}
-  header .tag{color:var(--muted);font-size:14px;margin-top:2px}
-  .card{background:var(--card);border-radius:20px;padding:16px;margin-top:16px;
+  header{padding:14px 4px 4px;text-align:center}
+  header h1{margin:0;font-size:22px;letter-spacing:-.4px}
+  header .tag{color:var(--muted);font-size:13px;margin-top:2px}
+  .card{background:var(--card);border-radius:16px;padding:13px;margin-top:11px;
     box-shadow:0 8px 24px rgba(15,118,110,.10);border:1px solid #eef2f1;animation:pop .35s ease both}
   @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   /* bandeau titre doux */
   .band{display:flex;align-items:center;gap:8px;background:var(--band);color:var(--teal);
-    font-weight:800;font-size:14px;letter-spacing:.2px;padding:9px 13px;border-radius:12px;margin:-2px -2px 12px}
+    font-weight:800;font-size:13px;letter-spacing:.2px;padding:7px 11px;border-radius:10px;margin:-1px -1px 10px}
   .band .ic{font-size:16px}
-  input[type=text],input[type=number]{width:100%;border:2px solid var(--line);border-radius:14px;
-    padding:13px 14px;font-size:17px;background:#fff;transition:border-color .15s, box-shadow .15s;outline:none;}
+  input[type=text],input[type=number]{width:100%;min-height:44px;border:2px solid var(--line);
+    border-radius:14px;padding:11px 12px;font-size:16.5px;background:#fff;transition:border-color .15s, box-shadow .15s;outline:none;}
   input:focus{border-color:var(--teal2);box-shadow:0 0 0 4px rgba(20,184,166,.15)}
   .dishname input{font-weight:700;background:var(--yellow);border-color:#fde68a}
-  .ing{border:1.5px solid #eef2f1;border-radius:16px;padding:11px 11px 8px;margin-bottom:10px;background:#fafffe}
-  .ing .nom{width:100%;margin-bottom:9px;font-weight:600}
+  .ing{border:1.5px solid #eef2f1;border-radius:13px;padding:9px 9px 6px;margin-bottom:8px;background:#fafffe}
+  .ing .nom{width:100%;margin-bottom:7px;font-weight:600}
   .ing .r2{display:grid;grid-template-columns:1fr 1fr 46px;gap:8px;align-items:end}
   .ing .fld{min-width:0}
-  .ing .fld label{display:block;font-size:11.5px;font-weight:800;color:var(--teal);margin:0 0 3px 3px;letter-spacing:.2px}
-  .ing .r2 input{width:100%;padding:12px 10px;font-size:16px}
-  .ing .del{height:46px;border:none;background:#f3f4f6;color:#9ca3af;border-radius:12px;font-size:20px;cursor:pointer;transition:.15s}
+  .ing .fld label{display:block;font-size:11px;font-weight:800;color:var(--teal);margin:0 0 2px 3px;letter-spacing:.2px}
+  .ing .r2 input{width:100%;min-height:44px;padding:10px 9px;font-size:16px}
+  .ing .del{height:44px;border:none;background:#f3f4f6;color:#9ca3af;border-radius:12px;font-size:20px;cursor:pointer;transition:.15s}
   .ing .del:active{background:#fee2e2;color:#dc2626;transform:scale(.92)}
-  .ing .cost{text-align:right;font-size:13px;color:var(--muted);margin-top:7px}
+  .ing .cost{text-align:right;font-size:12.5px;color:var(--muted);margin-top:5px}
   .add{width:100%;border:2px dashed #a7f3d0;background:#f0fdfa;color:var(--teal);
-    border-radius:14px;padding:13px;font-size:16px;font-weight:700;cursor:pointer;margin-top:2px;transition:.15s}
+    border-radius:12px;padding:11px;font-size:15.5px;font-weight:700;cursor:pointer;margin-top:2px;transition:.15s}
   .add:active{transform:scale(.98);background:#ccfbf1}
   .cost-big{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px;
-    background:#f0fdf4;border-radius:16px;padding:14px 16px}
-  .cost-big span{font-weight:700;font-size:15px}
-  .cost-big b{font-size:clamp(20px,6vw,26px);color:var(--teal);white-space:nowrap}
-  .seg{display:flex;background:#f1f5f9;border-radius:14px;padding:4px;gap:4px}
-  .seg button{flex:1;min-width:0;min-height:44px;border:none;background:transparent;padding:10px 4px;border-radius:11px;
+    background:#f0fdf4;border-radius:13px;padding:11px 14px}
+  .cost-big span{font-weight:700;font-size:14px}
+  .cost-big b{font-size:clamp(19px,5.4vw,23px);color:var(--teal);white-space:nowrap}
+  .seg{display:flex;background:#f1f5f9;border-radius:12px;padding:3px;gap:3px}
+  .seg button{flex:1;min-width:0;min-height:44px;border:none;background:transparent;padding:8px 4px;border-radius:10px;
     font-size:clamp(13px,3.9vw,15px);font-weight:700;color:var(--muted);cursor:pointer;transition:.15s}
   .seg button.on{background:#fff;color:var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.08)}
-  .sub-lbl{font-size:13px;font-weight:700;color:var(--muted);margin:16px 0 8px 2px}
+  .sub-lbl{font-size:12.5px;font-weight:700;color:var(--muted);margin:11px 0 6px 2px}
   .refline{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--badbg);
-    color:var(--bad);border-radius:14px;padding:11px 14px;font-size:14px;font-weight:700;margin-bottom:10px}
-  .refline b{font-size:17px;white-space:nowrap}
-  .prices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-  .price{border-radius:16px;padding:12px 6px;text-align:center;min-width:0}
-  .price small{display:block;font-size:12px;font-weight:800;opacity:.85}
-  .price b{display:block;font-size:clamp(14.5px,4.4vw,20px);margin-top:3px;white-space:nowrap}
-  .price .t{font-size:11px;color:var(--muted);margin-top:2px}
+    color:var(--bad);border-radius:12px;padding:9px 12px;font-size:13.5px;font-weight:700;margin-bottom:8px}
+  .refline b{font-size:16px;white-space:nowrap}
+  .prices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .price{border-radius:13px;padding:9px 5px;text-align:center;min-width:0}
+  .price small{display:block;font-size:11px;font-weight:800;opacity:.85}
+  .price b{display:block;font-size:clamp(14px,4.2vw,18px);margin-top:2px;white-space:nowrap}
+  .price .t{font-size:10px;color:var(--muted);margin-top:1px}
   .p1{background:var(--warnbg);color:var(--warn)} .p2{background:var(--goodbg);color:var(--good)} .p3{background:#e0f2fe;color:#0369a1}
-  .verdict{margin-top:4px;border-radius:20px;padding:20px;text-align:center;transition:.3s;background:#f3f4f6}
-  .verdict .emoji{font-size:44px;line-height:1}
-  .verdict .msg{font-size:22px;font-weight:800;margin-top:6px}
-  .verdict .sub{font-size:15px;margin-top:4px;opacity:.9}
+  .verdict{margin-top:10px;border-radius:16px;padding:14px;text-align:center;transition:.3s;background:#f3f4f6}
+  .verdict .emoji{font-size:32px;line-height:1}
+  .verdict .msg{font-size:19px;font-weight:800;margin-top:4px}
+  .verdict .sub{font-size:13.5px;margin-top:3px;opacity:.9}
   .v-good{background:var(--goodbg)} .v-good .msg{color:var(--good)}
   .v-warn{background:var(--warnbg)} .v-warn .msg{color:var(--warn)}
   .v-bad{background:var(--badbg)} .v-bad .msg{color:var(--bad);}
   .v-bad{animation:shake .4s}
   @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-  .pdf-full{width:100%;border:none;border-radius:14px;padding:15px;font-size:16px;font-weight:800;cursor:pointer;background:var(--teal);color:#fff;transition:.15s}
+  .pdf-full{width:100%;min-height:44px;border:none;border-radius:12px;padding:12px;font-size:15.5px;font-weight:800;cursor:pointer;background:var(--teal);color:#fff;transition:.15s}
   .pdf-full:active{transform:scale(.98);background:#0b5f59}
   .pdf-full.ghost{background:#f0fdfa;color:var(--teal);border:2px solid #a7f3d0}
   .pdf-full.ghost:active{background:#ccfbf1}
   .pdf-full[disabled]{background:var(--goodbg);color:var(--good);cursor:default}
-  .keep-note{font-size:12.5px;color:var(--muted);margin-top:8px;text-align:center}
-  .hint{background:#fff;border-radius:16px;padding:14px 16px;margin-top:14px;font-size:13.5px;color:#374151;border:1px solid #eef2f1;line-height:1.5}
+  .keep-note{font-size:12px;color:var(--muted);margin-top:6px;text-align:center}
+  .hint{background:#fff;border-radius:13px;padding:11px 13px;margin-top:11px;font-size:12.5px;color:#374151;border:1px solid #eef2f1;line-height:1.45}
   .hint b{color:var(--teal)}
-  .foot{text-align:center;color:var(--muted);font-size:12px;margin-top:18px;line-height:1.5}
+  .foot{text-align:center;color:var(--muted);font-size:11.5px;margin-top:14px;line-height:1.45}
   .foot .ip{font-weight:700;color:#374151}
   .foot button{border:none;background:none;color:#ef4444;font-size:13px;font-weight:700;cursor:pointer;
     text-decoration:underline;margin-top:6px;min-height:44px;padding:0 14px}
@@ -104,6 +121,23 @@
   #versplats .pill{background:var(--band);border-radius:999px;padding:2px 9px;font-size:13px}
   #versplats .pill.rouge{background:var(--badbg);color:var(--bad)}
 
+  /* bandeau d'installation */
+  #install{display:none;align-items:center;gap:8px;margin-top:10px;
+    background:var(--teal);color:#fff;border-radius:13px;padding:8px 8px 8px 14px;
+    box-shadow:0 6px 18px rgba(15,118,110,.22)}
+  #install.show{display:flex}
+  #install .txt{flex:1;min-width:0;text-align:left;font-size:13.5px;font-weight:700;line-height:1.3}
+  #install .go{flex:none;min-height:44px;border:none;background:#fff;color:var(--teal);
+    border-radius:10px;padding:9px 13px;font-size:14px;font-weight:800;cursor:pointer;white-space:nowrap}
+  #install .x{flex:none;min-width:34px;min-height:44px;border:none;background:transparent;
+    color:#a7f3d0;font-size:16px;font-weight:800;cursor:pointer}
+  #aide-install{display:none;margin-top:9px;background:#fff;border:1px solid #cbe9e4;
+    border-radius:13px;padding:12px 14px;font-size:13.5px;line-height:1.55;color:#374151;text-align:left}
+  #aide-install.show{display:block}
+  #aide-install b{color:var(--teal)}
+  #aide-install ol{margin:6px 0 0;padding-left:20px}
+  #aide-install li{margin-bottom:4px}
+
   /* écrans */
   #vue-plats{display:none}
   body.plats #vue-calc{display:none}
@@ -112,18 +146,18 @@
   .topbar .back{min-width:46px;min-height:46px;border:1px solid #cbe9e4;background:#fff;color:var(--teal);
     border-radius:14px;font-size:20px;font-weight:800;cursor:pointer}
   .topbar h1{margin:0;font-size:21px;letter-spacing:-.3px;flex:1}
-  .synth{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
-  .synth div{border-radius:16px;padding:12px 6px;text-align:center;font-weight:800}
-  .synth b{display:block;font-size:24px}
+  .synth{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:11px}
+  .synth div{border-radius:13px;padding:9px 5px;text-align:center;font-weight:800}
+  .synth b{display:block;font-size:21px}
   .synth small{font-size:11.5px;font-weight:700;opacity:.9}
   .s-bad{background:var(--badbg);color:var(--bad)} .s-warn{background:var(--warnbg);color:var(--warn)} .s-good{background:var(--goodbg);color:var(--good)}
-  .grp{font-size:13px;font-weight:800;color:var(--muted);margin:18px 0 8px 2px}
-  .plat{display:flex;align-items:center;gap:11px;background:#fff;border:1px solid #eef2f1;border-radius:16px;
-    padding:12px 13px;margin-bottom:9px;box-shadow:0 4px 14px rgba(15,118,110,.06)}
+  .grp{font-size:12.5px;font-weight:800;color:var(--muted);margin:13px 0 6px 2px}
+  .plat{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #eef2f1;border-radius:13px;
+    padding:10px 11px;margin-bottom:7px;box-shadow:0 4px 14px rgba(15,118,110,.06)}
   .plat .dot{font-size:19px;line-height:1}
   .plat .txt{flex:1;min-width:0;text-align:left;background:none;border:none;padding:0;cursor:pointer;font:inherit;color:inherit;min-height:44px}
-  .plat .nm{font-weight:800;font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .plat .dt{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .plat .nm{font-weight:800;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .plat .dt{font-size:12px;color:var(--muted);margin-top:1px}
   .plat .co{font-weight:800;font-size:17px;white-space:nowrap}
   .plat.b-bad .co{color:var(--bad)} .plat.b-warn .co{color:var(--warn)} .plat.b-good .co{color:var(--good)}
   .plat.b-none .co{color:#9ca3af;font-size:13px}
@@ -181,6 +215,12 @@
     <h1>🍽️ Ma Marge</h1>
     <div class="tag">Ton plat te rapporte, ou te coûte ?</div>
     <button type="button" id="versplats"><span>📋 Mes plats</span></button>
+    <div id="install">
+      <span class="txt">Ajoute-la à ton écran d'accueil</span>
+      <button type="button" class="go" id="installgo">Installer</button>
+      <button type="button" class="x" id="installx" aria-label="Masquer">✕</button>
+    </div>
+    <div id="aide-install"></div>
   </header>
 
   <div class="card dishname">
@@ -585,6 +625,58 @@ load(); if(!state.ings.length)state.ings=[{nom:'',pk:'',g:''}];
 $('#dish').value=state.dish||''; $('#prix').value=state.prix||'';
 [...$('#tva').children].forEach(x=>x.classList.toggle('on',parseFloat(x.dataset.t)===state.tva));
 render(); route();
+
+/* ————— installation sur l'écran d'accueil —————
+   Android/Chrome émet beforeinstallprompt et laisse déclencher l'installation.
+   iOS ne l'émet jamais : Safari n'a pas de bouton, il faut passer par Partager →
+   « Sur l'écran d'accueil ». D'où un bandeau qui s'adapte, plutôt que d'attendre
+   un bouton du navigateur qui, sur iPhone, n'existe pas. */
+const CLE_INST='mamarge-install-masque';
+const iOS=/iPad|iPhone|iPod/.test(navigator.userAgent)
+       || (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const dejaInstallee=()=>matchMedia('(display-mode: standalone)').matches
+                      || navigator.standalone===true;
+let invite=null;
+
+function montrerInstall(){
+  if(dejaInstallee())return;
+  try{if(localStorage.getItem(CLE_INST))return;}catch(e){}
+  $('#install').classList.add('show');
+}
+function cacherInstall(){
+  $('#install').classList.remove('show');
+  $('#aide-install').classList.remove('show');
+}
+function aideInstall(){
+  const safariIOS=iOS&&!/CriOS|FxiOS|EdgiOS|OPiOS/.test(navigator.userAgent);
+  const h=iOS
+    ? `<b>Sur iPhone, en 3 gestes :</b><ol>
+         <li>Touche le bouton <b>Partager</b> (le carré avec une flèche vers le haut).</li>
+         <li>Fais défiler, puis touche <b>« Sur l'écran d'accueil »</b>.</li>
+         <li>Touche <b>Ajouter</b>. L'icône € arrive sur ton écran.</li>
+       </ol>${safariIOS?'':`<div style="margin-top:8px">Tu n'es pas dans Safari.
+         Si tu ne vois pas « Sur l'écran d'accueil », rouvre ce lien
+         <b>dans Safari</b> et recommence.</div>`}`
+    : `<b>Sur Android, en 2 gestes :</b><ol>
+         <li>Touche le menu <b>⋮</b> en haut à droite du navigateur.</li>
+         <li>Touche <b>« Installer l'application »</b> (ou « Ajouter à l'écran d'accueil »).</li>
+       </ol><div style="margin-top:8px">Si tu as ouvert le lien depuis WhatsApp ou Messenger,
+         rouvre-le <b>dans Chrome</b> : les navigateurs intégrés ne savent pas installer.</div>`;
+  $('#aide-install').innerHTML=h;
+  $('#aide-install').classList.add('show');
+}
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();invite=e;montrerInstall();});
+addEventListener('appinstalled',()=>{invite=null;cacherInstall();flash('Installée ✅');});
+$('#installgo').onclick=async()=>{
+  if(invite){const e=invite;invite=null;e.prompt();
+    const r=await e.userChoice.catch(()=>null);
+    if(r&&r.outcome==='accepted')cacherInstall(); else montrerInstall();
+    return;}
+  aideInstall();
+};
+$('#installx').onclick=()=>{try{localStorage.setItem(CLE_INST,'1');}catch(e){}cacherInstall();};
+// iOS n'émettra jamais l'événement : on propose tout de suite.
+if(iOS)montrerInstall();
 
 // service worker + bandeau de mise à jour.
 // On ne recharge QUE si l'utilisateur a cliqué « Mettre à jour » : au tout premier

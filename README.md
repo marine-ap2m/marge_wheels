@@ -36,6 +36,21 @@ avec les rouges d'abord. Toucher un plat le rouvre dans l'écran de calcul.
 
 Les deux passent par l'impression du navigateur → « Enregistrer au format PDF ».
 
+## Installation sur le téléphone
+
+Un bandeau « Ajoute-la à ton écran d'accueil » s'affiche tant que l'appli n'est
+pas installée. Sur Android il déclenche l'installation de Chrome ; sur iPhone il
+affiche la marche à suivre, Safari n'ayant pas de bouton d'installation. Il
+disparaît une fois l'appli installée, et la croix le masque définitivement.
+
+## Aperçu quand on envoie le lien
+
+Les balises `og:` en tête de `index.html` produisent la vignette affichée par
+WhatsApp, les SMS et Messenger. **`og:url` et `og:image` doivent rester des
+adresses absolues** — ces applications ne résolvent pas les chemins relatifs —
+donc à corriger si le site change d'adresse. L'image est `apercu-partage.png`
+(1200 × 630).
+
 ## Les données
 
 Elles vivent dans le téléphone (`localStorage`), rien n'est envoyé nulle part.
@@ -60,7 +75,7 @@ faire avant de changer de téléphone, puisque rien n'est synchronisé en ligne.
 ## Modifier l'appli
 
 À chaque mise en ligne, **incrémenter le numéro de version en haut de `sw.js`**
-(`mamarge-v3` → `mamarge-v4`). Sans ça, les téléphones qui ont déjà l'appli
+(`mamarge-v4` → `mamarge-v5`). Sans ça, les téléphones qui ont déjà l'appli
 gardent l'ancienne version en mémoire.
 
 ---

@@ -37,11 +37,20 @@ C'est ton adresse. Elle ne changera plus.
 
 Ouvre cette adresse **sur le téléphone**, puis :
 
+L'appli affiche elle-même un bandeau **« Ajoute-la à ton écran d'accueil »** avec
+un bouton *Installer*. Sur Android il fait tout ; sur iPhone il affiche les trois
+gestes à faire, parce que Safari n'a pas de bouton d'installation — c'est normal,
+il n'en a jamais eu.
+
 - **iPhone** — il faut **Safari** (Chrome sur iPhone ne sait pas installer) :
   bouton Partager (le carré avec la flèche, en bas) → descendre → **Sur l'écran
   d'accueil** → **Ajouter**.
 - **Android** — Chrome : menu **⋮** en haut à droite → **Installer
   l'application** (ou *Ajouter à l'écran d'accueil*).
+
+⚠️ Ouvert depuis WhatsApp ou Messenger, le lien s'affiche dans le navigateur
+intégré de l'application, qui **ne sait pas installer**. Il faut rouvrir le lien
+dans Safari ou Chrome.
 
 L'icône € arrive sur l'écran d'accueil. Ouvre-la : plein écran, sans barre de
 navigateur, et **ça marche sans réseau** — utile en cuisine ou en cave.
@@ -87,7 +96,7 @@ fait. Rien à réinstaller, et la saisie en cours n'est jamais interrompue par u
 rechargement surprise.
 
 ⚠️ Une seule règle pour que ça marche : à chaque mise en ligne, **changer le
-numéro de version en haut de `sw.js`** (`mamarge-v3` → `mamarge-v4`, etc.).
+numéro de version en haut de `sw.js`** (`mamarge-v4` → `mamarge-v5`, etc.).
 Sans ça, les téléphones qui ont déjà l'appli gardent l'ancienne version en
 mémoire.
 
@@ -100,6 +109,8 @@ mémoire.
 | Page blanche, ou 404 | Pages pas encore construit | attendre 2 min, recharger |
 | Pas de « Sur l'écran d'accueil » sur iPhone | tu es dans Chrome | rouvrir le lien dans Safari |
 | Le téléphone garde l'ancienne version | numéro de version de `sw.js` inchangé | l'incrémenter et repousser |
+| Pas de vignette quand on envoie le lien | l'application a mis le lien en cache sans aperçu | renvoyer le lien ; WhatsApp garde son cache un moment |
+| Pas de bouton « Installer » du navigateur | normal sur iPhone, et dans les navigateurs intégrés | utiliser le bandeau de l'appli, ou rouvrir dans Safari / Chrome |
 | Vraiment coincé sur une vieille version | cache tenace | iPhone : Réglages → Safari → Effacer historique. Android : appui long sur l'icône → Infos appli → Stockage → Vider le cache |
 
 ---
