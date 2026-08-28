@@ -96,7 +96,7 @@ fait. Rien à réinstaller, et la saisie en cours n'est jamais interrompue par u
 rechargement surprise.
 
 ⚠️ Une seule règle pour que ça marche : à chaque mise en ligne, **changer le
-numéro de version en haut de `sw.js`** (`mamarge-v4` → `mamarge-v5`, etc.).
+numéro de version en haut de `sw.js`** (`mamarge-v5` → `mamarge-v6`, etc.).
 Sans ça, les téléphones qui ont déjà l'appli gardent l'ancienne version en
 mémoire.
 

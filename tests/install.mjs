@@ -43,7 +43,7 @@ console.log('\n=== bandeau d’installation — Android ===');
   const c=await b.newContext({...devices['Pixel 7'],locale:'fr-FR'});const p=await c.newPage();
   await p.goto(U);
   await p.waitForTimeout(400);
-  ok(!(await p.locator('#install').isVisible()),'rien tant que Chrome n’a pas signalé l’installabilité');
+  ok(!(await p.locator('#install').isVisible()),'rien dans les premières secondes');
   // on simule l'evenement que Chrome emet sur un vrai telephone
   await p.evaluate(()=>{const e=new Event('beforeinstallprompt');
     e.prompt=()=>{window.__prompt=true;};
@@ -58,12 +58,25 @@ console.log('\n=== bandeau d’installation — Android ===');
   await c.close();
 }
 
+console.log('\n=== Android : Chrome reste muet (navigateur intégré, critères non remplis) ===');
+{
+  const c=await b.newContext({...devices['Pixel 7'],locale:'fr-FR'});const p=await c.newPage();
+  await p.goto(U);
+  await p.waitForSelector('#install.show',{timeout:8000});
+  ok(true,'le bandeau finit par apparaître quand même');
+  await p.click('#installgo');
+  const t=await p.textContent('#aide-install');
+  ok(/Installer l'application/.test(t)&&/⋮/.test(t),'il explique le menu ⋮ de Chrome');
+  ok(/WhatsApp/.test(t),'et prévient pour les navigateurs intégrés');
+  await c.close();
+}
+
 console.log('\n=== une fois installée, plus de bandeau ===');
 {
   const c=await b.newContext({...devices['iPhone 14 Pro'],locale:'fr-FR'});const p=await c.newPage();
   await p.addInitScript(()=>{const m=matchMedia;window.matchMedia=q=>q==='(display-mode: standalone)'?{matches:true,addListener(){},removeListener(){},addEventListener(){},removeEventListener(){}}:m(q);});
   await p.goto(U);
-  await p.waitForTimeout(400);
+  await p.waitForTimeout(4500);          // au-delà du délai de repli
   ok(!(await p.locator('#install').isVisible()),'aucun bandeau en mode application');
   await c.close();
 }

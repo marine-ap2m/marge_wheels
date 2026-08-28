@@ -88,7 +88,8 @@ for (const name of ['iPhone SE','iPhone 14 Pro','Pixel 7']) {
     const bad=[];
     for (const el of document.querySelectorAll('button, input')) {
       const r=el.getBoundingClientRect();
-      if (r.height>0 && r.height<44) bad.push((el.id||el.className||el.tagName)+' h='+Math.round(r.height));
+      // 43,5 : tolérance à l'arrondi sous-pixel d'un min-height:44px
+      if (r.height>0 && r.height<43.5) bad.push((el.id||el.className||el.tagName)+' h='+r.height.toFixed(2));
     }
     return bad;
   });
