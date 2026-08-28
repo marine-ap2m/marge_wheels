@@ -37,9 +37,11 @@
     /* Échelle fluide : sur un écran de 360 px le texte est ~12 % plus petit que
        sur un 412 px, au lieu d'être figé. Les champs de saisie, eux, restent à
        16 px minimum — en dessous, iOS zoome tout seul dès qu'on les touche. */
-    --t-xs:clamp(9.5px,2.7vw,11px);
-    --t-sm:clamp(10.5px,3vw,12.5px);
-    --t-md:clamp(12px,3.4vw,14px);
+    --t-xs:clamp(9.5px,2.7vw,11px);   /* mentions, notes de bas de carte */
+    --t-sm:clamp(10.5px,3vw,12.5px);  /* texte secondaire */
+    --t-md:clamp(12px,3.4vw,14px);    /* RÉFÉRENCE : celle des titres de carte */
+    --t-lg:clamp(15px,4.2vw,17px);    /* chiffres mis en avant */
+    --t-xl:clamp(17px,4.8vw,19px);    /* verdict, titres d'écran */
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0}
@@ -50,7 +52,7 @@
     padding:env(safe-area-inset-top) 0 calc(24px + env(safe-area-inset-bottom));}
   .wrap{max-width:520px;margin:0 auto;padding:0 16px}
   header{padding:14px 4px 4px;text-align:center}
-  header h1{margin:0;font-size:clamp(19px,5.4vw,22px);letter-spacing:-.4px}
+  header h1{margin:0;font-size:var(--t-xl);letter-spacing:-.4px}
   header .tag{color:var(--muted);font-size:var(--t-sm);margin-top:1px}
   .card{background:var(--card);border-radius:16px;padding:13px;margin-top:11px;
     box-shadow:0 8px 24px rgba(15,118,110,.10);border:1px solid #eef2f1;animation:pop .35s ease both}
@@ -60,7 +62,7 @@
     font-weight:800;font-size:var(--t-md);letter-spacing:.2px;padding:6px 10px;border-radius:10px;margin:-1px -1px 9px}
   .band .ic{font-size:16px}
   input[type=text],input[type=number]{width:100%;min-height:44px;border:2px solid var(--line);
-    border-radius:14px;padding:11px 12px;font-size:16.5px;background:#fff;transition:border-color .15s, box-shadow .15s;outline:none;}
+    border-radius:14px;padding:11px 12px;font-size:16px;background:#fff;transition:border-color .15s, box-shadow .15s;outline:none;}
   input:focus{border-color:var(--teal2);box-shadow:0 0 0 4px rgba(20,184,166,.15)}
   .dish{margin-top:10px;font-weight:700;background:var(--yellow);border-color:#fde68a}
   .ing{border:1.5px solid #eef2f1;border-radius:13px;padding:9px 9px 6px;margin-bottom:8px;background:#fafffe}
@@ -72,13 +74,13 @@
   .ing .del{height:44px;border:none;background:#f3f4f6;color:#9ca3af;border-radius:12px;font-size:20px;cursor:pointer;transition:.15s}
   .ing .del:active{background:#fee2e2;color:#dc2626;transform:scale(.92)}
   .ing .cost{text-align:right;font-size:var(--t-xs);color:var(--muted);margin-top:5px}
-  .add{width:100%;border:2px dashed #a7f3d0;background:#f0fdfa;color:var(--teal);
-    border-radius:12px;padding:11px;font-size:clamp(13.5px,3.9vw,15.5px);font-weight:700;cursor:pointer;margin-top:2px;transition:.15s}
+  .add{width:100%;min-height:44px;border:2px dashed #a7f3d0;background:#f0fdfa;color:var(--teal);
+    border-radius:12px;padding:11px;font-size:var(--t-md);font-weight:700;cursor:pointer;margin-top:2px;transition:.15s}
   .add:active{transform:scale(.98);background:#ccfbf1}
   .cost-big{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px;
     background:#f0fdf4;border-radius:13px;padding:11px 14px}
   .cost-big span{font-weight:700;font-size:var(--t-md)}
-  .cost-big b{font-size:clamp(17px,5vw,22px);color:var(--teal);white-space:nowrap}
+  .cost-big b{font-size:var(--t-lg);color:var(--teal);white-space:nowrap}
   .seg{display:flex;background:#f1f5f9;border-radius:12px;padding:3px;gap:3px}
   .seg button{flex:1;min-width:0;min-height:44px;border:none;background:transparent;padding:8px 4px;border-radius:10px;
     font-size:var(--t-md);font-weight:700;color:var(--muted);cursor:pointer;transition:.15s}
@@ -86,18 +88,18 @@
   .sub-lbl{font-size:var(--t-sm);font-weight:700;color:var(--muted);margin:10px 0 6px 2px}
   .refline{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--badbg);
     color:var(--bad);border-radius:12px;padding:8px 11px;font-size:var(--t-sm);font-weight:700;margin-bottom:7px}
-  .refline b{font-size:clamp(14px,4vw,16px);white-space:nowrap}
+  .refline b{font-size:var(--t-md);white-space:nowrap}
   .prices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
   .price{border-radius:13px;padding:9px 5px;text-align:center;min-width:0}
   .price small{display:block;font-size:var(--t-xs);font-weight:800;opacity:.85}
-  .price b{display:block;font-size:clamp(13px,4vw,17px);margin-top:2px;white-space:nowrap}
+  .price b{display:block;font-size:var(--t-md);margin-top:2px;white-space:nowrap}
   .price .t{font-size:var(--t-xs);color:var(--muted);margin-top:1px}
   .p1{background:var(--warnbg);color:var(--warn)} .p2{background:var(--goodbg);color:var(--good)} .p3{background:#e0f2fe;color:#0369a1}
   .verdict{margin-top:10px;border-radius:16px;padding:14px;text-align:center;transition:.3s;background:#f3f4f6}
   /* tant qu'aucun prix n'est saisi, le bloc se réduit à une ligne d'invite */
   .verdict.vide{padding:11px;font-size:var(--t-md);font-weight:700;color:#6b7280;line-height:1.4}
-  .verdict .emoji{font-size:clamp(25px,7.4vw,32px);line-height:1}
-  .verdict .msg{font-size:clamp(16px,4.8vw,19px);font-weight:800;margin-top:3px}
+  .verdict .emoji{font-size:clamp(22px,6.2vw,26px);line-height:1}
+  .verdict .msg{font-size:var(--t-xl);font-weight:800;margin-top:3px}
   .verdict .sub{font-size:var(--t-sm);margin-top:2px;opacity:.9}
   .v-good{background:var(--goodbg)} .v-good .msg{color:var(--good)}
   .v-warn{background:var(--warnbg)} .v-warn .msg{color:var(--warn)}
@@ -105,7 +107,7 @@
   .v-bad{animation:shake .4s}
   @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-  .pdf-full{width:100%;min-height:44px;border:none;border-radius:12px;padding:11px;font-size:clamp(13.5px,3.9vw,15.5px);font-weight:800;cursor:pointer;background:var(--teal);color:#fff;transition:.15s}
+  .pdf-full{width:100%;min-height:44px;border:none;border-radius:12px;padding:11px;font-size:var(--t-md);font-weight:800;cursor:pointer;background:var(--teal);color:#fff;transition:.15s}
   .pdf-full:active{transform:scale(.98);background:#0b5f59}
   .pdf-full.ghost{background:#f0fdfa;color:var(--teal);border:2px solid #a7f3d0}
   .pdf-full.ghost:active{background:#ccfbf1}
@@ -153,10 +155,10 @@
   .topbar{display:flex;align-items:center;gap:10px;padding:18px 0 0}
   .topbar .back{min-width:46px;min-height:46px;border:1px solid #cbe9e4;background:#fff;color:var(--teal);
     border-radius:14px;font-size:20px;font-weight:800;cursor:pointer}
-  .topbar h1{margin:0;font-size:clamp(18px,5.2vw,21px);letter-spacing:-.3px;flex:1}
+  .topbar h1{margin:0;font-size:var(--t-xl);letter-spacing:-.3px;flex:1}
   .synth{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:11px}
   .synth div{border-radius:13px;padding:9px 5px;text-align:center;font-weight:800}
-  .synth b{display:block;font-size:clamp(18px,5.2vw,21px)}
+  .synth b{display:block;font-size:var(--t-xl)}
   .synth small{font-size:var(--t-xs);font-weight:700;opacity:.9}
   .s-bad{background:var(--badbg);color:var(--bad)} .s-warn{background:var(--warnbg);color:var(--warn)} .s-good{background:var(--goodbg);color:var(--good)}
   .grp{font-size:var(--t-sm);font-weight:800;color:var(--muted);margin:12px 0 6px 2px}
@@ -164,9 +166,9 @@
     padding:10px 11px;margin-bottom:7px;box-shadow:0 4px 14px rgba(15,118,110,.06)}
   .plat .dot{font-size:19px;line-height:1}
   .plat .txt{flex:1;min-width:0;text-align:left;background:none;border:none;padding:0;cursor:pointer;font:inherit;color:inherit;min-height:44px}
-  .plat .nm{font-weight:800;font-size:clamp(13.5px,3.9vw,15px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .plat .nm{font-weight:800;font-size:var(--t-md);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .plat .dt{font-size:var(--t-xs);color:var(--muted);margin-top:1px}
-  .plat .co{font-weight:800;font-size:clamp(15px,4.4vw,17px);white-space:nowrap}
+  .plat .co{font-weight:800;font-size:var(--t-lg);white-space:nowrap}
   .plat.b-bad .co{color:var(--bad)} .plat.b-warn .co{color:var(--warn)} .plat.b-good .co{color:var(--good)}
   .plat.b-none .co{color:#9ca3af;font-size:13px}
   .plat .sup{min-width:44px;min-height:44px;border:none;background:#f3f4f6;color:#9ca3af;border-radius:12px;font-size:17px;cursor:pointer}
@@ -355,7 +357,7 @@ function rowHTML(i){return `<div class="ing" data-i="${i}">
   <input class="nom" type="text" placeholder="Nom de l'ingrédient" autocomplete="off" data-k="nom" value="${esc(state.ings[i].nom)}">
   <div class="r2">
     <div class="fld"><label>Prix au kg</label><input type="text" inputmode="decimal" autocomplete="off" placeholder="€/kg" data-k="pk" value="${esc(state.ings[i].pk)}"></div>
-    <div class="fld"><label>Poids (g)</label><input type="text" inputmode="decimal" autocomplete="off" placeholder="grammes" data-k="g" value="${esc(state.ings[i].g)}"></div>
+    <div class="fld"><label>Poids par plat</label><input type="text" inputmode="decimal" autocomplete="off" placeholder="grammes" data-k="g" value="${esc(state.ings[i].g)}"></div>
     <button class="del" type="button" title="Retirer" aria-label="Retirer cet ingrédient">✕</button>
   </div>
   <div class="cost">= <b>${euro(cost(i))}</b></div></div>`;}
@@ -473,7 +475,7 @@ const PIED='<div class="ipf">AP2M Gestion® — Propriété intellectuelle, marq
 function tableIngs(p){
   const r=p.ings.filter(x=>x.nom||x.pk||x.g).map(x=>
     `<tr><td>${esc(x.nom)}</td><td class="n">${euro(num(x.pk))}/kg</td><td class="n">${num(x.g).toLocaleString('fr-FR')} g</td><td class="n">${euro(coutIng(x))}</td></tr>`).join('');
-  return `<table><tr><th>Ingrédient</th><th>Prix au kg</th><th>Poids</th><th>Coût</th></tr>${r||'<tr><td colspan=4>—</td></tr>'}
+  return `<table><tr><th>Ingrédient</th><th>Prix au kg</th><th>Poids/plat</th><th>Coût</th></tr>${r||'<tr><td colspan=4>—</td></tr>'}
     <tr class="tot"><td colspan="3">Ce que ça te coûte</td><td class="n">${euro(coutPlat(p))}</td></tr></table>`;
 }
 function blocPrix(p){const t=coutPlat(p),k=1+p.tva;

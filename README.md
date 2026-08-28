@@ -3,7 +3,8 @@
 PWA de calcul de rentabilité, pour un restaurateur. Aucune dépendance, aucun
 serveur, aucun compte : tout tient dans un fichier HTML et fonctionne hors-ligne.
 
-Un ingrédient = nom + prix au kg + poids en grammes.
+Un ingrédient = nom + prix au kg + **poids par plat**, en grammes : la quantité
+servie dans une assiette, pas la quantité achetée.
 Coût de revient = somme de `prix au kg × grammes ÷ 1000`.
 
 ## Coefficients de la stratégie
@@ -40,9 +41,22 @@ Les deux passent par l'impression du navigateur → « Enregistrer au format PDF
 
 Les tailles de police sont fluides (`clamp()` en `vw`) : sur un écran de 360 px
 le texte est environ 12 % plus petit que sur un 412 px, au lieu d'être figé.
-Deux planchers restent volontairement fixes : **44 px** de haut pour toute cible
-tactile, et **16 px** pour les champs de saisie — en dessous, iOS zoome de
-lui-même sur le champ à chaque fois qu'on le touche.
+
+L'échelle tient en cinq variables définies sur `:root`. **`--t-md` est la
+référence** — c'est la taille des titres de carte (« Les ingrédients »), et tout
+le reste se place autour :
+
+| Variable | Usage |
+|---|---|
+| `--t-xs` | mentions, notes de bas de carte |
+| `--t-sm` | texte secondaire |
+| `--t-md` | **référence** : titres de carte, boutons, prix conseillés |
+| `--t-lg` | chiffres mis en avant (coût total, coefficient dans la liste) |
+| `--t-xl` | verdict, titres d'écran |
+
+Deux planchers restent volontairement fixes et échappent à l'échelle : **44 px**
+de haut pour toute cible tactile, et **16 px** pour les champs de saisie — en
+dessous, iOS zoome de lui-même sur le champ à chaque fois qu'on le touche.
 
 Cela ne compense pas l'agrandissement du texte réglé au niveau du système
 (Android : Paramètres → Affichage → Taille de police ; Chrome → Paramètres →
@@ -88,7 +102,7 @@ faire avant de changer de téléphone, puisque rien n'est synchronisé en ligne.
 ## Modifier l'appli
 
 À chaque mise en ligne, **incrémenter le numéro de version en haut de `sw.js`**
-(`mamarge-v5` → `mamarge-v6`). Sans ça, les téléphones qui ont déjà l'appli
+(`mamarge-v6` → `mamarge-v7`). Sans ça, les téléphones qui ont déjà l'appli
 gardent l'ancienne version en mémoire.
 
 ---
