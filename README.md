@@ -36,6 +36,19 @@ avec les rouges d'abord. Toucher un plat le rouvre dans l'écran de calcul.
 
 Les deux passent par l'impression du navigateur → « Enregistrer au format PDF ».
 
+## Taille du texte
+
+Les tailles de police sont fluides (`clamp()` en `vw`) : sur un écran de 360 px
+le texte est environ 12 % plus petit que sur un 412 px, au lieu d'être figé.
+Deux planchers restent volontairement fixes : **44 px** de haut pour toute cible
+tactile, et **16 px** pour les champs de saisie — en dessous, iOS zoome de
+lui-même sur le champ à chaque fois qu'on le touche.
+
+Cela ne compense pas l'agrandissement du texte réglé au niveau du système
+(Android : Paramètres → Affichage → Taille de police ; Chrome → Paramètres →
+Accessibilité → Mise à l'échelle du texte). C'est un choix de l'utilisateur, et
+il est respecté.
+
 ## Installation sur le téléphone
 
 Un bandeau « Ajoute-la à ton écran d'accueil » s'affiche tant que l'appli n'est
@@ -75,7 +88,7 @@ faire avant de changer de téléphone, puisque rien n'est synchronisé en ligne.
 ## Modifier l'appli
 
 À chaque mise en ligne, **incrémenter le numéro de version en haut de `sw.js`**
-(`mamarge-v4` → `mamarge-v5`). Sans ça, les téléphones qui ont déjà l'appli
+(`mamarge-v5` → `mamarge-v6`). Sans ça, les téléphones qui ont déjà l'appli
 gardent l'ancienne version en mémoire.
 
 ---

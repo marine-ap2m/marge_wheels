@@ -170,7 +170,9 @@ console.log('\n=== mise en page de la liste sur petit écran ===');
   const sc = await p3.evaluate(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth }));
   ok(sc.sw <= sc.cw + 1, `liste : pas de scroll horizontal à 320 px (${sc.sw} ≤ ${sc.cw})`);
   const petites = await p3.evaluate(() => [...document.querySelectorAll('#vue-plats button')]
-    .filter(e => { const r = e.getBoundingClientRect(); return r.height > 0 && r.height < 44; })
+    // 43,5 et non 44 : le rendu peut arrondir un min-height:44px à 43,99 selon
+    // la position sous-pixel de l'élément. On vise le vrai défaut, pas l'arrondi.
+    .filter(e => { const r = e.getBoundingClientRect(); return r.height > 0 && r.height < 43.5; })
     .map(e => (e.className || e.id) + ' h=' + Math.round(e.getBoundingClientRect().height)));
   ok(petites.length === 0, `cibles tactiles ≥ 44 px ${petites.length ? JSON.stringify(petites) : ''}`);
   const grps = await p3.$$eval('.grp', n => n.map(e => e.textContent.trim()));
