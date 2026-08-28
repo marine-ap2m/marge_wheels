@@ -25,10 +25,22 @@ Pixel 7 :
 - la reprise des données de la version précédente de l'appli ;
 - la mise en page de la liste à 320 px.
 
+**`install.mjs`** — l'installation et le partage :
+
+- les balises d'aperçu (`og:`), l'adresse absolue de l'image et le fichier servi ;
+- le bandeau d'installation : proposé d'emblée sur iPhone (Safari n'a pas de
+  bouton natif), seulement sur signal de Chrome sur Android, jamais quand
+  l'appli tourne déjà en mode application ;
+- les instructions adaptées à la plateforme, et la croix qui masque le bandeau
+  pour de bon ;
+- la hauteur de page en nombre d'écrans, garde-fou contre le retour de la
+  mise en page trop aérée.
+
 Pour les lancer :
 
 ```sh
 npx --yes http-server -p 8123 -s .      # dans un terminal
 node tests/mobile.mjs                   # dans un autre
 node tests/plats.mjs
+node tests/install.mjs
 ```
