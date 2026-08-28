@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<meta name="description" content="Ma Marge — calcule en 10 secondes si un plat est rentable.">
+<meta name="apple-mobile-web-app-title" content="Ma Marge">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Ma Marge</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="favicon.png">
+<style>
+  :root{
+    --teal:#0f766e; --teal2:#14b8a6; --ink:#12312e; --muted:#5b6b68;
+    --bg1:#ecfdf5; --bg2:#e0f2fe; --card:#ffffff;
+    --good:#16a34a; --goodbg:#dcfce7; --warn:#d97706; --warnbg:#fef3c7; --bad:#dc2626; --badbg:#fee2e2;
+    --line:#e5e7eb; --yellow:#fffbeb; --band:#e6f7f4;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2));
+    background-attachment:fixed;
+    min-height:100vh;min-height:100dvh;
+    padding:env(safe-area-inset-top) 0 calc(40px + env(safe-area-inset-bottom));}
+  .wrap{max-width:520px;margin:0 auto;padding:0 16px}
+  header{padding:22px 4px 6px;text-align:center}
+  header h1{margin:0;font-size:26px;letter-spacing:-.5px}
+  header .tag{color:var(--muted);font-size:14px;margin-top:2px}
+  .card{background:var(--card);border-radius:20px;padding:16px;margin-top:16px;
+    box-shadow:0 8px 24px rgba(15,118,110,.10);border:1px solid #eef2f1;animation:pop .35s ease both}
+  @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  /* bandeau titre doux */
+  .band{display:flex;align-items:center;gap:8px;background:var(--band);color:var(--teal);
+    font-weight:800;font-size:14px;letter-spacing:.2px;padding:9px 13px;border-radius:12px;margin:-2px -2px 12px}
+  .band .ic{font-size:16px}
+  input[type=text],input[type=number]{width:100%;border:2px solid var(--line);border-radius:14px;
+    padding:13px 14px;font-size:17px;background:#fff;transition:border-color .15s, box-shadow .15s;outline:none;}
+  input:focus{border-color:var(--teal2);box-shadow:0 0 0 4px rgba(20,184,166,.15)}
+  .dishname input{font-weight:700;background:var(--yellow);border-color:#fde68a}
+  .ing{border:1.5px solid #eef2f1;border-radius:16px;padding:11px 11px 8px;margin-bottom:10px;background:#fafffe}
+  .ing .nom{width:100%;margin-bottom:9px;font-weight:600}
+  .ing .r2{display:grid;grid-template-columns:1fr 1fr 46px;gap:8px;align-items:end}
+  .ing .fld{min-width:0}
+  .ing .fld label{display:block;font-size:11.5px;font-weight:800;color:var(--teal);margin:0 0 3px 3px;letter-spacing:.2px}
+  .ing .r2 input{width:100%;padding:12px 10px;font-size:16px}
+  .ing .del{height:46px;border:none;background:#f3f4f6;color:#9ca3af;border-radius:12px;font-size:20px;cursor:pointer;transition:.15s}
+  .ing .del:active{background:#fee2e2;color:#dc2626;transform:scale(.92)}
+  .ing .cost{text-align:right;font-size:13px;color:var(--muted);margin-top:7px}
+  .add{width:100%;border:2px dashed #a7f3d0;background:#f0fdfa;color:var(--teal);
+    border-radius:14px;padding:13px;font-size:16px;font-weight:700;cursor:pointer;margin-top:2px;transition:.15s}
+  .add:active{transform:scale(.98);background:#ccfbf1}
+  .cost-big{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px;
+    background:#f0fdf4;border-radius:16px;padding:14px 16px}
+  .cost-big span{font-weight:700;font-size:15px}
+  .cost-big b{font-size:clamp(20px,6vw,26px);color:var(--teal);white-space:nowrap}
+  .seg{display:flex;background:#f1f5f9;border-radius:14px;padding:4px;gap:4px}
+  .seg button{flex:1;min-width:0;min-height:44px;border:none;background:transparent;padding:10px 4px;border-radius:11px;
+    font-size:clamp(13px,3.9vw,15px);font-weight:700;color:var(--muted);cursor:pointer;transition:.15s}
+  .seg button.on{background:#fff;color:var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.08)}
+  .sub-lbl{font-size:13px;font-weight:700;color:var(--muted);margin:16px 0 8px 2px}
+  .refline{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--badbg);
+    color:var(--bad);border-radius:14px;padding:11px 14px;font-size:14px;font-weight:700;margin-bottom:10px}
+  .refline b{font-size:17px;white-space:nowrap}
+  .prices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .price{border-radius:16px;padding:12px 6px;text-align:center;min-width:0}
+  .price small{display:block;font-size:12px;font-weight:800;opacity:.85}
+  .price b{display:block;font-size:clamp(14.5px,4.4vw,20px);margin-top:3px;white-space:nowrap}
+  .price .t{font-size:11px;color:var(--muted);margin-top:2px}
+  .p1{background:var(--warnbg);color:var(--warn)} .p2{background:var(--goodbg);color:var(--good)} .p3{background:#e0f2fe;color:#0369a1}
+  .verdict{margin-top:4px;border-radius:20px;padding:20px;text-align:center;transition:.3s;background:#f3f4f6}
+  .verdict .emoji{font-size:44px;line-height:1}
+  .verdict .msg{font-size:22px;font-weight:800;margin-top:6px}
+  .verdict .sub{font-size:15px;margin-top:4px;opacity:.9}
+  .v-good{background:var(--goodbg)} .v-good .msg{color:var(--good)}
+  .v-warn{background:var(--warnbg)} .v-warn .msg{color:var(--warn)}
+  .v-bad{background:var(--badbg)} .v-bad .msg{color:var(--bad);}
+  .v-bad{animation:shake .4s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  .pdf-full{width:100%;border:none;border-radius:14px;padding:15px;font-size:16px;font-weight:800;cursor:pointer;background:var(--teal);color:#fff;transition:.15s}
+  .pdf-full:active{transform:scale(.98);background:#0b5f59}
+  .pdf-full.ghost{background:#f0fdfa;color:var(--teal);border:2px solid #a7f3d0}
+  .pdf-full.ghost:active{background:#ccfbf1}
+  .pdf-full[disabled]{background:var(--goodbg);color:var(--good);cursor:default}
+  .keep-note{font-size:12.5px;color:var(--muted);margin-top:8px;text-align:center}
+  .hint{background:#fff;border-radius:16px;padding:14px 16px;margin-top:14px;font-size:13.5px;color:#374151;border:1px solid #eef2f1;line-height:1.5}
+  .hint b{color:var(--teal)}
+  .foot{text-align:center;color:var(--muted);font-size:12px;margin-top:18px;line-height:1.5}
+  .foot .ip{font-weight:700;color:#374151}
+  .foot button{border:none;background:none;color:#ef4444;font-size:13px;font-weight:700;cursor:pointer;
+    text-decoration:underline;margin-top:6px;min-height:44px;padding:0 14px}
+  .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+  /* accès à la liste — n'apparaît qu'une fois un plat enregistré,
+     l'écran d'ouverture reste le calcul de marge */
+  #versplats{display:none;width:100%;margin-top:12px;align-items:center;justify-content:center;gap:8px;
+    min-height:46px;border:1px solid #cbe9e4;background:#fff;color:var(--teal);border-radius:14px;
+    padding:10px 14px;font-size:14.5px;font-weight:800;cursor:pointer;
+    box-shadow:0 4px 14px rgba(15,118,110,.08)}
+  #versplats.show{display:flex}
+  #versplats .pill{background:var(--band);border-radius:999px;padding:2px 9px;font-size:13px}
+  #versplats .pill.rouge{background:var(--badbg);color:var(--bad)}
+
+  /* écrans */
+  #vue-plats{display:none}
+  body.plats #vue-calc{display:none}
+  body.plats #vue-plats{display:block}
+  .topbar{display:flex;align-items:center;gap:10px;padding:18px 0 0}
+  .topbar .back{min-width:46px;min-height:46px;border:1px solid #cbe9e4;background:#fff;color:var(--teal);
+    border-radius:14px;font-size:20px;font-weight:800;cursor:pointer}
+  .topbar h1{margin:0;font-size:21px;letter-spacing:-.3px;flex:1}
+  .synth{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
+  .synth div{border-radius:16px;padding:12px 6px;text-align:center;font-weight:800}
+  .synth b{display:block;font-size:24px}
+  .synth small{font-size:11.5px;font-weight:700;opacity:.9}
+  .s-bad{background:var(--badbg);color:var(--bad)} .s-warn{background:var(--warnbg);color:var(--warn)} .s-good{background:var(--goodbg);color:var(--good)}
+  .grp{font-size:13px;font-weight:800;color:var(--muted);margin:18px 0 8px 2px}
+  .plat{display:flex;align-items:center;gap:11px;background:#fff;border:1px solid #eef2f1;border-radius:16px;
+    padding:12px 13px;margin-bottom:9px;box-shadow:0 4px 14px rgba(15,118,110,.06)}
+  .plat .dot{font-size:19px;line-height:1}
+  .plat .txt{flex:1;min-width:0;text-align:left;background:none;border:none;padding:0;cursor:pointer;font:inherit;color:inherit;min-height:44px}
+  .plat .nm{font-weight:800;font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .plat .dt{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .plat .co{font-weight:800;font-size:17px;white-space:nowrap}
+  .plat.b-bad .co{color:var(--bad)} .plat.b-warn .co{color:var(--warn)} .plat.b-good .co{color:var(--good)}
+  .plat.b-none .co{color:#9ca3af;font-size:13px}
+  .plat .sup{min-width:44px;min-height:44px;border:none;background:#f3f4f6;color:#9ca3af;border-radius:12px;font-size:17px;cursor:pointer}
+  .plat .sup:active{background:#fee2e2;color:#dc2626}
+  .vide{text-align:center;color:var(--muted);font-size:14.5px;line-height:1.6;padding:26px 10px}
+  /* .foot button est rouge (action destructive) : les liens de sauvegarde, eux,
+     ne le sont pas — d'où la sélection plus spécifique. */
+  .foot button.lien,.lien{border:none;background:none;color:var(--teal);font-size:13.5px;
+    font-weight:700;text-decoration:underline;cursor:pointer;min-height:44px;padding:0 10px;margin-top:0}
+
+  /* bandeau "nouvelle version" */
+  #maj{display:none;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));
+    z-index:50;background:var(--ink);color:#fff;border-radius:14px;padding:12px 14px;
+    align-items:center;justify-content:space-between;gap:10px;font-size:14px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  #maj.show{display:flex}
+  #maj button{border:none;background:var(--teal2);color:#062e2b;font-weight:800;font-size:14px;
+    border-radius:10px;padding:9px 13px;cursor:pointer;white-space:nowrap}
+  /* petit message de confirmation */
+  #flash{display:none;position:fixed;left:50%;transform:translateX(-50%);
+    bottom:calc(20px + env(safe-area-inset-bottom));z-index:60;background:var(--ink);color:#fff;
+    border-radius:999px;padding:11px 20px;font-size:14.5px;font-weight:700;
+    box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  #flash.show{display:block;animation:pop .25s ease both}
+
+  /* impression / PDF */
+  #print{display:none}
+  @media print{
+    .wrap,#maj,#flash{display:none!important} body{background:#fff;padding:0}
+    #print{display:block;padding:24px;color:#111;font-size:13px}
+    #print h2{margin:0 0 4px;font-size:20px;color:#0f766e}
+    #print h3{margin:22px 0 2px;font-size:15px;color:#0f766e;page-break-after:avoid}
+    #print .meta{color:#666;margin-bottom:14px}
+    #print table{width:100%;border-collapse:collapse;margin:8px 0}
+    #print th,#print td{border:1px solid #cbd5e1;padding:7px 9px;text-align:left}
+    #print th{background:#0f766e;color:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    #print td.n{text-align:right}
+    #print .tot{font-weight:800;background:#ecfdf5}
+    #print .box{border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;margin-top:10px}
+    #print .verd{font-size:16px;font-weight:800;margin-top:10px}
+    #print .bloc{page-break-inside:avoid}
+    #print .ipf{margin-top:22px;font-size:11px;color:#666;border-top:1px solid #e5e7eb;padding-top:8px}
+    #print .r-bad{background:#fee2e2;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    #print .r-warn{background:#fef3c7;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    #print .r-good{background:#dcfce7;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+
+<!-- ÉCRAN 1 — le calcul de marge, c'est ce qui s'ouvre -->
+<div class="wrap" id="vue-calc">
+  <header>
+    <h1>🍽️ Ma Marge</h1>
+    <div class="tag">Ton plat te rapporte, ou te coûte ?</div>
+    <button type="button" id="versplats"><span>📋 Mes plats</span></button>
+  </header>
+
+  <div class="card dishname">
+    <div class="band"><span class="ic">🍔</span>Nom du plat</div>
+    <label class="sr" for="dish">Nom du plat</label>
+    <input id="dish" type="text" placeholder="Ex. Burger maison" autocomplete="off">
+  </div>
+
+  <div class="card">
+    <div class="band"><span class="ic">🧺</span>Les ingrédients</div>
+    <div id="ings"></div>
+    <button class="add" id="add">＋ Ajouter un ingrédient</button>
+    <div class="cost-big"><span>Ce que ça te coûte</span><b id="cout">0,00 €</b></div>
+  </div>
+
+  <div class="card">
+    <div class="band"><span class="ic">🏷️</span>À quel prix le vendre ?</div>
+    <div class="seg" id="tva">
+      <button type="button" data-t="0.10" class="on">TVA 10 % (plat)</button>
+      <button type="button" data-t="0.20">TVA 20 % (alcool)</button>
+    </div>
+    <div class="sub-lbl">Prix en carte conseillés (TTC) — repères de la stratégie</div>
+    <div class="refline"><span>Aujourd'hui ×2,1 · tu perds</span><b id="c21">–</b></div>
+    <div class="prices">
+      <div class="price p1"><small>Mini ×2,5</small><b id="c25">–</b><div class="t">le seuil</div></div>
+      <div class="price p2"><small>Bien ×3</small><b id="c3">–</b><div class="t">conseillé</div></div>
+      <div class="price p3"><small>Top ×4</small><b id="c4">–</b><div class="t">confort</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="band"><span class="ic">🤔</span>Et toi, tu le vends combien ? (TTC)</div>
+    <label class="sr" for="prix">Ton prix de vente en carte, TTC</label>
+    <input id="prix" type="text" inputmode="decimal" autocomplete="off" placeholder="Ton prix en carte">
+    <div class="verdict" id="verdict" aria-live="polite">
+      <div class="emoji">👆</div>
+      <div class="msg" style="color:#6b7280">Entre ton prix</div>
+      <div class="sub">On te dit tout de suite si c'est rentable</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="band"><span class="ic">💾</span>Garder ce plat</div>
+    <button class="pdf-full" id="enr">💾 Enregistrer ce plat</button>
+    <div class="keep-note" id="enr-note">Il rejoint « Mes plats » — tu le retrouves quand tu veux.</div>
+    <button class="pdf-full ghost" id="pdf" style="margin-top:10px">📄 Fiche de ce plat (PDF)</button>
+  </div>
+
+  <div class="hint">
+    💡 <b>Astuce</b> : vise au moins <b>×3</b> sur les plats, <b>×4 à ×5</b> sur les boissons. Tout ce qui est en <b>rouge</b>, on monte le prix ou on retire de la carte.
+  </div>
+
+  <div class="foot">
+    <button id="reset">Effacer et repartir de zéro</button>
+    <div style="margin-top:12px" class="ip">AP2M Gestion®</div>
+    <div>Propriété intellectuelle, marque déposée</div>
+  </div>
+</div>
+
+<!-- ÉCRAN 2 — la synthèse de la carte -->
+<div class="wrap" id="vue-plats">
+  <div class="topbar">
+    <button type="button" class="back" id="retour" aria-label="Retour au calcul">‹</button>
+    <h1>📋 Mes plats</h1>
+  </div>
+
+  <div id="synthese"></div>
+  <div id="liste"></div>
+
+  <div class="card" id="carte-actions">
+    <div class="band"><span class="ic">📄</span>Toute la carte</div>
+    <button class="pdf-full" id="pdfcarte">📄 Exporter toute la carte (PDF)</button>
+    <div class="keep-note">Une page de synthèse, puis le détail de chaque plat.</div>
+  </div>
+
+  <div class="foot">
+    <button type="button" class="lien" id="sauver">Sauvegarder mes plats (fichier)</button>
+    <button type="button" class="lien" id="restaurer">Restaurer une sauvegarde</button>
+    <input type="file" id="fichier" accept="application/json,.json" hidden>
+    <div class="keep-note" style="margin-top:2px">À faire avant de changer de téléphone : tes plats sont enregistrés dans cet appareil, pas sur internet.</div>
+    <div style="margin-top:14px" class="ip">AP2M Gestion®</div>
+    <div>Propriété intellectuelle, marque déposée</div>
+  </div>
+</div>
+
+<div id="maj"><span>Nouvelle version disponible.</span><button id="majgo">Mettre à jour</button></div>
+<div id="flash" role="status" aria-live="polite"></div>
+<div id="print"></div>
+
+<script>
+const $=s=>document.querySelector(s), ingsEl=$('#ings');
+const CLE='mamarge2', CLE_V1='mamarge';
+
+/* plats  : la carte enregistrée.
+   state  : le plat ouvert dans l'écran de calcul. Il est toujours persisté,
+            même non enregistré : rien n'est perdu si l'appli se ferme.
+            state.id non nul = ce plat vient de la liste.               */
+let plats=[], state={id:null,dish:'',tva:0.10,prix:'',ings:[]};
+
+/* Saisie FR : « 12,50 », « 12.50 », « 12,50 € » et espaces donnent tous 12,5. */
+function num(v){
+  const s=String(v??'').replace(/[\s  €]/g,'').replace(',','.');
+  const n=parseFloat(s);
+  return (isFinite(n)&&n>0)?n:0;
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function euro(n){return (isFinite(n)?n:0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';}
+/* Arrondi vers le bas : le coefficient affiché ne peut jamais contredire la couleur
+   (2,96 s'affiche ×2,9 en orange, et non ×3,0). */
+function coefTxt(c){return (Math.floor(c*10)/10).toFixed(1).replace('.',',');}
+
+/* ————— calculs, sur un plat quelconque ————— */
+function coutIng(x){return num(x.pk)*num(x.g)/1000;}
+function coutPlat(p){return p.ings.reduce((s,x)=>s+coutIng(x),0);}
+function analyse(p){
+  const t=coutPlat(p), htp=num(p.prix)/(1+p.tva), coef=t?htp/t:0;
+  const st=(!t||!num(p.prix))?'none':coef<2.5?'bad':coef<3?'warn':'good';
+  return {t,coef,marge:htp-t,st};
+}
+const MSG={bad:'TU PERDS',warn:'LIMITE',good:'TU GAGNES',none:''};
+const DOT={bad:'🔴',warn:'🟠',good:'✅',none:'⚪'};
+/* Pas de découpe d'une chaîne « emoji + texte » : 🔴 et 🟠 sont des paires de
+   substitution UTF-16 (deux unités) alors que ✅ n'en occupe qu'une. */
+const ETIQ={bad:DOT.bad+' '+MSG.bad, warn:DOT.warn+' '+MSG.warn, good:DOT.good+' '+MSG.good, none:'—'};
+
+function cost(i){return coutIng(state.ings[i]);}
+function total(){return coutPlat(state);}
+function ht(){return num(state.prix)/(1+state.tva);}
+
+/* ————— écran 1 : le calcul ————— */
+function rowHTML(i){return `<div class="ing" data-i="${i}">
+  <input class="nom" type="text" placeholder="Nom de l'ingrédient" autocomplete="off" data-k="nom" value="${esc(state.ings[i].nom)}">
+  <div class="r2">
+    <div class="fld"><label>Prix au kg</label><input type="text" inputmode="decimal" autocomplete="off" placeholder="€/kg" data-k="pk" value="${esc(state.ings[i].pk)}"></div>
+    <div class="fld"><label>Poids (g)</label><input type="text" inputmode="decimal" autocomplete="off" placeholder="grammes" data-k="g" value="${esc(state.ings[i].g)}"></div>
+    <button class="del" type="button" title="Retirer" aria-label="Retirer cet ingrédient">✕</button>
+  </div>
+  <div class="cost">= <b>${euro(cost(i))}</b></div></div>`;}
+
+function prices(){const t=total(),k=1+state.tva;
+  $('#c21').textContent=t?euro(t*2.1*k):'–';
+  $('#c25').textContent=t?euro(t*2.5*k):'–';
+  $('#c3').textContent =t?euro(t*3*k):'–';
+  $('#c4').textContent =t?euro(t*4*k):'–';}
+
+function verdict(){
+  const v=$('#verdict'), a=analyse(state);
+  if(a.st==='none'){v.className='verdict';v.innerHTML='<div class="emoji">👆</div><div class="msg" style="color:#6b7280">Entre ton prix</div><div class="sub">On te dit tout de suite si c\'est rentable</div>';return;}
+  v.className='verdict v-'+a.st;
+  v.innerHTML=`<div class="emoji">${DOT[a.st]}</div><div class="msg">${MSG[a.st]}</div>
+    <div class="sub">Coefficient <b>×${coefTxt(a.coef)}</b> · marge <b>${euro(a.marge)}</b> par plat</div>`;
+}
+
+/* ————— enregistrement dans la carte ————— */
+function propre(p){return {id:p.id,nom:(p.dish??p.nom??'').trim(),tva:p.tva,prix:p.prix,
+  ings:p.ings.filter(x=>x.nom||x.pk||x.g).map(x=>({nom:x.nom||'',pk:x.pk||'',g:x.g||''}))};}
+function memeQue(a,b){return JSON.stringify(propre(a))===JSON.stringify(propre(b));}
+function enregistre(){
+  const nom=state.dish.trim();
+  if(!nom){flash('Donne un nom au plat ✏️');$('#dish').focus();
+    $('#dish').scrollIntoView({behavior:'smooth',block:'center'});return;}
+  if(!state.ings.some(x=>x.nom||x.pk||x.g)){flash('Ajoute au moins un ingrédient');return;}
+  const p=propre(state);
+  if(state.id){const i=plats.findIndex(x=>x.id===state.id);
+    if(i>=0){plats[i]={...p,id:state.id,maj:Date.now()};} else {state.id=null;}}
+  if(!state.id){state.id='p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    plats.push({...p,id:state.id,maj:Date.now()});}
+  save();majBoutonEnr();majAccesPlats();
+  flash('Plat enregistré ✅');
+}
+function majBoutonEnr(){
+  const b=$('#enr'), n=$('#enr-note');
+  const sauve=state.id&&plats.find(x=>x.id===state.id);
+  if(sauve&&memeQue(state,sauve)){
+    b.textContent='✅ Plat enregistré';b.disabled=true;
+    n.textContent='Il est dans « Mes plats ». Modifie-le, tu pourras le ré-enregistrer.';
+  }else{
+    b.disabled=false;
+    b.textContent=sauve?'💾 Enregistrer les modifications':'💾 Enregistrer ce plat';
+    n.textContent=sauve?'Ce plat a changé depuis le dernier enregistrement.'
+                       :'Il rejoint « Mes plats » — tu le retrouves quand tu veux.';
+  }
+}
+function majAccesPlats(){
+  const b=$('#versplats');
+  if(!plats.length){b.classList.remove('show');return;}
+  const rouges=plats.filter(p=>analyse(p).st==='bad').length;
+  b.innerHTML=`<span>📋 Mes plats</span><span class="pill">${plats.length}</span>`
+    +(rouges?`<span class="pill rouge">${rouges} en rouge</span>`:'');
+  b.classList.add('show');
+}
+
+/* ————— écran 2 : la synthèse ————— */
+function ouvrePlat(id){
+  const p=plats.find(x=>x.id===id); if(!p)return;
+  state={id:p.id,dish:p.nom,tva:p.tva,prix:p.prix,ings:p.ings.map(x=>({...x}))};
+  if(!state.ings.length)state.ings=[{nom:'',pk:'',g:''}];
+  $('#dish').value=state.dish; $('#prix').value=state.prix;
+  [...$('#tva').children].forEach(x=>x.classList.toggle('on',parseFloat(x.dataset.t)===state.tva));
+  location.hash=''; route(); render();
+}
+function supprimePlat(id){
+  const p=plats.find(x=>x.id===id); if(!p)return;
+  if(!confirm(`Supprimer « ${p.nom} » de ta carte ?`))return;
+  plats=plats.filter(x=>x.id!==id);
+  if(state.id===id)state.id=null;          // le plat reste ouvert, simplement plus lié
+  save();rendPlats();majAccesPlats();majBoutonEnr();
+}
+function rendPlats(){
+  const n={bad:0,warn:0,good:0,none:0};
+  const av=plats.map(p=>({p,a:analyse(p)}));
+  av.forEach(x=>n[x.a.st]++);
+  $('#synthese').innerHTML = plats.length ? `<div class="synth">
+      <div class="s-bad"><b>${n.bad}</b><small>en rouge</small></div>
+      <div class="s-warn"><b>${n.warn}</b><small>limite</small></div>
+      <div class="s-good"><b>${n.good}</b><small>ça gagne</small></div>
+    </div>` : '';
+
+  if(!plats.length){
+    $('#liste').innerHTML=`<div class="card"><div class="vide">Aucun plat enregistré pour l'instant.<br>
+      Calcule un plat, puis touche <b>« Enregistrer ce plat »</b> :<br>il apparaîtra ici.</div></div>`;
+    $('#carte-actions').style.display='none'; return;
+  }
+  $('#carte-actions').style.display='';
+
+  const ordre={bad:0,warn:1,good:2,none:3};
+  av.sort((x,y)=>ordre[x.a.st]-ordre[y.a.st] || x.a.coef-y.a.coef
+                 || x.p.nom.localeCompare(y.p.nom,'fr'));
+  let html='', grp=null;
+  const TITRE={bad:'🔴 À corriger en priorité',warn:'🟠 Juste au-dessus du seuil',
+               good:'✅ Ça gagne',none:'⚪ À compléter'};
+  for(const {p,a} of av){
+    if(a.st!==grp){grp=a.st;html+=`<div class="grp">${TITRE[grp]}</div>`;}
+    const det = a.st==='none'
+      ? (a.t?'prix de vente à renseigner':'ingrédients à renseigner')
+      : `${euro(num(p.prix))} TTC · coûte ${euro(a.t)} · marge ${euro(a.marge)}`;
+    html+=`<div class="plat b-${a.st}">
+      <span class="dot">${DOT[a.st]}</span>
+      <button type="button" class="txt" data-open="${p.id}">
+        <div class="nm">${esc(p.nom)||'(sans nom)'}</div><div class="dt">${det}</div></button>
+      <span class="co">${a.st==='none'?'–':'×'+coefTxt(a.coef)}</span>
+      <button type="button" class="sup" data-sup="${p.id}" aria-label="Supprimer ${esc(p.nom)}">✕</button>
+    </div>`;
+  }
+  $('#liste').innerHTML=html;
+}
+
+/* ————— impression ————— */
+const PIED='<div class="ipf">AP2M Gestion® — Propriété intellectuelle, marque déposée.</div>';
+function tableIngs(p){
+  const r=p.ings.filter(x=>x.nom||x.pk||x.g).map(x=>
+    `<tr><td>${esc(x.nom)}</td><td class="n">${euro(num(x.pk))}/kg</td><td class="n">${num(x.g).toLocaleString('fr-FR')} g</td><td class="n">${euro(coutIng(x))}</td></tr>`).join('');
+  return `<table><tr><th>Ingrédient</th><th>Prix au kg</th><th>Poids</th><th>Coût</th></tr>${r||'<tr><td colspan=4>—</td></tr>'}
+    <tr class="tot"><td colspan="3">Ce que ça te coûte</td><td class="n">${euro(coutPlat(p))}</td></tr></table>`;
+}
+function blocPrix(p){const t=coutPlat(p),k=1+p.tva;
+  return `<div class="box"><b>Prix conseillés (TTC)</b><br>
+    Aujourd'hui ×2,1 : ${euro(t*2.1*k)} (tu perds) · Mini ×2,5 : ${euro(t*2.5*k)} · Bien ×3 : ${euro(t*3*k)} · Top ×4 : ${euro(t*4*k)}</div>`;}
+
+/* Tenue à jour en permanence : le bouton PDF comme l'impression directe du
+   navigateur (Ctrl/Cmd+P) sortent la même chose. */
+function ficheCourante(){
+  const p={...state,nom:state.dish}, a=analyse(p);
+  $('#print').innerHTML=`
+    <h2>Fiche : ${esc(state.dish)||'(plat sans nom)'}</h2>
+    <div class="meta">Ma Marge · fiche de rentabilité · TVA ${(state.tva*100).toFixed(0)} %</div>
+    ${tableIngs(p)}${blocPrix(p)}
+    ${a.st==='none'?'':`<div class="verd">${ETIQ[a.st]} — coefficient ×${coefTxt(a.coef)}, marge ${euro(a.marge)} par plat (prix ${euro(num(p.prix))} TTC)</div>`}
+    ${PIED}`;
+}
+function ficheCarte(){
+  const av=plats.map(p=>({p,a:analyse(p)}));
+  const ordre={bad:0,warn:1,good:2,none:3};
+  av.sort((x,y)=>ordre[x.a.st]-ordre[y.a.st] || x.a.coef-y.a.coef || x.p.nom.localeCompare(y.p.nom,'fr'));
+  const n={bad:0,warn:0,good:0,none:0}; av.forEach(x=>n[x.a.st]++);
+  const synth=av.map(({p,a})=>`<tr class="r-${a.st}"><td>${esc(p.nom)||'(sans nom)'}</td>
+    <td class="n">${euro(a.t)}</td><td class="n">${num(p.prix)?euro(num(p.prix)):'–'}</td>
+    <td class="n">${a.st==='none'?'–':'×'+coefTxt(a.coef)}</td>
+    <td class="n">${a.st==='none'?'–':euro(a.marge)}</td><td>${ETIQ[a.st]}</td></tr>`).join('');
+  const detail=av.map(({p,a})=>`<div class="bloc"><h3>${esc(p.nom)||'(sans nom)'} — TVA ${(p.tva*100).toFixed(0)} %</h3>
+    ${tableIngs(p)}${blocPrix(p)}
+    ${a.st==='none'?'':`<div class="verd">${ETIQ[a.st]} — coefficient ×${coefTxt(a.coef)}, marge ${euro(a.marge)} par plat (prix ${euro(num(p.prix))} TTC)</div>`}</div>`).join('');
+  $('#print').innerHTML=`
+    <h2>Ma carte — ${plats.length} plat${plats.length>1?'s':''}</h2>
+    <div class="meta">Ma Marge · synthèse de rentabilité · ${new Date().toLocaleDateString('fr-FR')}
+      · ${n.bad} en rouge, ${n.warn} limite, ${n.good} rentables${n.none?', '+n.none+' à compléter':''}</div>
+    <table><tr><th>Plat</th><th>Coût</th><th>Prix TTC</th><th>Coef.</th><th>Marge</th><th>Verdict</th></tr>${synth}</table>
+    <div class="box">Seuils : rouge sous ×2,5 · orange de ×2,5 à ×3 · vert à partir de ×3.
+      Coefficient calculé hors taxes.</div>
+    ${detail}${PIED}`;
+}
+
+/* ————— stockage ————— */
+function refresh(){$('#cout').textContent=euro(total());prices();verdict();ficheCourante();majBoutonEnr();save();}
+function render(){ingsEl.innerHTML=state.ings.map((_,i)=>rowHTML(i)).join('');refresh();majAccesPlats();}
+function save(){try{localStorage.setItem(CLE,JSON.stringify({v:2,plats,courant:state}));}catch(e){}}
+
+function nettoiePlat(p,i){
+  if(!p||typeof p!=='object')return null;
+  return {id:typeof p.id==='string'&&p.id?p.id:'p'+i+Date.now().toString(36),
+    nom:(p.nom??'')+'', tva:(p.tva===0.2||p.tva===0.20)?0.20:0.10, prix:(p.prix??'')+'',
+    ings:Array.isArray(p.ings)?p.ings.filter(x=>x&&typeof x==='object')
+      .map(x=>({nom:(x.nom??'')+'',pk:(x.pk??'')+'',g:(x.g??'')+''})):[],
+    maj:typeof p.maj==='number'?p.maj:Date.now()};
+}
+function load(){
+  try{
+    const d=JSON.parse(localStorage.getItem(CLE));
+    if(d&&typeof d==='object'){
+      plats=Array.isArray(d.plats)?d.plats.map(nettoiePlat).filter(Boolean):[];
+      const c=d.courant;
+      if(c&&typeof c==='object'){
+        const p=nettoiePlat({...c,nom:c.dish},0);
+        state={id:typeof c.id==='string'?c.id:null,dish:p.nom,tva:p.tva,prix:p.prix,ings:p.ings};
+      }
+      return;
+    }
+  }catch(e){}
+  try{                                   // reprise de l'ancienne version (un seul plat)
+    const v1=JSON.parse(localStorage.getItem(CLE_V1));
+    if(v1&&typeof v1==='object'){
+      const p=nettoiePlat({...v1,nom:v1.dish},0);
+      state={id:null,dish:p.nom,tva:p.tva,prix:p.prix,ings:p.ings};
+    }
+  }catch(e){}
+}
+
+/* ————— sauvegarde fichier ————— */
+function sauvegarder(){
+  if(!plats.length){flash('Aucun plat à sauvegarder');return;}
+  const nom='ma-marge-'+new Date().toISOString().slice(0,10)+'.json';
+  const blob=new Blob([JSON.stringify({app:'Ma Marge',v:2,date:new Date().toISOString(),plats},null,2)],
+                      {type:'application/json'});
+  const url=URL.createObjectURL(blob), a=document.createElement('a');
+  a.href=url;a.download=nom;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),4000);
+  flash('Sauvegarde de '+plats.length+' plat'+(plats.length>1?'s':''));
+}
+function restaurer(f){
+  const r=new FileReader();
+  r.onload=()=>{
+    let d; try{d=JSON.parse(r.result);}catch(e){flash('Fichier illisible');return;}
+    const arr=Array.isArray(d)?d:(d&&Array.isArray(d.plats)?d.plats:null);
+    if(!arr){flash('Ce fichier ne contient pas de plats');return;}
+    const nv=arr.map(nettoiePlat).filter(Boolean);
+    if(!nv.length){flash('Ce fichier ne contient pas de plats');return;}
+    if(!confirm(`Remplacer tes ${plats.length} plat(s) par les ${nv.length} de la sauvegarde ?`))return;
+    plats=nv; state.id=null; save(); rendPlats(); majAccesPlats(); majBoutonEnr();
+    flash(nv.length+' plat'+(nv.length>1?'s':'')+' restauré'+(nv.length>1?'s':''));
+  };
+  r.onerror=()=>flash('Fichier illisible');
+  r.readAsText(f);
+}
+
+let tFlash;
+function flash(msg){const f=$('#flash');f.textContent=msg;f.classList.add('show');
+  clearTimeout(tFlash);tFlash=setTimeout(()=>f.classList.remove('show'),2200);}
+
+/* ————— navigation entre les deux écrans ————— */
+function route(){
+  const surPlats=location.hash==='#plats';
+  document.body.classList.toggle('plats',surPlats);
+  if(surPlats)rendPlats();
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+
+/* ————— écouteurs ————— */
+ingsEl.addEventListener('input',e=>{const row=e.target.closest('.ing');if(!row)return;
+  const i=+row.dataset.i,k=e.target.dataset.k;if(!state.ings[i]||!k)return;
+  state.ings[i][k]=e.target.value;
+  row.querySelector('.cost b').textContent=euro(cost(i));
+  refresh();});
+ingsEl.addEventListener('click',e=>{const del=e.target.closest('.del');if(!del)return;
+  const i=+del.closest('.ing').dataset.i;state.ings.splice(i,1);
+  if(!state.ings.length)state.ings.push({nom:'',pk:'',g:''});render();});
+$('#add').onclick=()=>{state.ings.push({nom:'',pk:'',g:''});render();
+  setTimeout(()=>{const r=ingsEl.querySelector('.ing:last-child .nom');r&&r.focus();},30);};
+$('#dish').addEventListener('input',e=>{state.dish=e.target.value;ficheCourante();majBoutonEnr();save();});
+$('#prix').addEventListener('input',e=>{state.prix=e.target.value;verdict();ficheCourante();majBoutonEnr();save();});
+$('#tva').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  [...$('#tva').children].forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  state.tva=parseFloat(b.dataset.t);refresh();});
+$('#reset').onclick=()=>{if(confirm('Effacer ce plat et repartir de zéro ?\n\n(tes plats enregistrés sont conservés)')){
+  state={id:null,dish:'',tva:0.10,prix:'',ings:[{nom:'',pk:'',g:''}]};$('#dish').value='';$('#prix').value='';
+  [...$('#tva').children].forEach((x,i)=>x.classList.toggle('on',i===0));render();}};
+$('#enr').onclick=enregistre;
+$('#pdf').onclick=()=>{ficheCourante();window.print();};
+$('#pdfcarte').onclick=()=>{ficheCarte();window.print();
+  setTimeout(ficheCourante,500);};      // on rend la fiche du plat courant au print direct
+$('#versplats').onclick=()=>{location.hash='#plats';route();};
+$('#retour').onclick=()=>{if(history.length>1)history.back();else{location.hash='';route();}};
+$('#liste').addEventListener('click',e=>{
+  const o=e.target.closest('[data-open]'); if(o)return ouvrePlat(o.dataset.open);
+  const s=e.target.closest('[data-sup]');  if(s)return supprimePlat(s.dataset.sup);});
+$('#sauver').onclick=sauvegarder;
+$('#restaurer').onclick=()=>$('#fichier').click();
+$('#fichier').addEventListener('change',e=>{const f=e.target.files[0];if(f)restaurer(f);e.target.value='';});
+
+// init
+load(); if(!state.ings.length)state.ings=[{nom:'',pk:'',g:''}];
+$('#dish').value=state.dish||''; $('#prix').value=state.prix||'';
+[...$('#tva').children].forEach(x=>x.classList.toggle('on',parseFloat(x.dataset.t)===state.tva));
+render(); route();
+
+// service worker + bandeau de mise à jour.
+// On ne recharge QUE si l'utilisateur a cliqué « Mettre à jour » : au tout premier
+// chargement, clients.claim() déclenche aussi controllerchange, et recharger là
+// serait un clignotement sans raison.
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  let demande=false;
+  function proposerMaj(sw){
+    if(!sw||!navigator.serviceWorker.controller)return;
+    $('#maj').classList.add('show');
+    $('#majgo').onclick=()=>{demande=true;$('#maj').classList.remove('show');sw.postMessage('skipWaiting');};
+  }
+  navigator.serviceWorker.register('sw.js').then(reg=>{
+    proposerMaj(reg.waiting);
+    reg.addEventListener('updatefound',()=>{
+      const sw=reg.installing;
+      sw&&sw.addEventListener('statechange',()=>{if(sw.state==='installed')proposerMaj(sw);});
+    });
+  }).catch(()=>{});
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(demande){demande=false;location.reload();}
+  });
+}
+</script>
+</body>
+</html>
